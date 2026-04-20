@@ -1,0 +1,542 @@
+/* ═══════════════════════════════════════════════════════════
+   TrisGame — Modern Dark Theme
+   Premium dark UI with vibrant accents and glassmorphism
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Global Root ─── */
+.root {
+    -fx-font-family: "Segoe UI", "Helvetica Neue", "Arial", sans-serif;
+    -fx-font-size: 13px;
+}
+
+/* ─── Home Screen ─── */
+.home-root {
+    -fx-background-color: linear-gradient(to bottom right, #0f0c29, #1a1a3e, #24243e);
+}
+
+/* ─── Cards (glass panels) ─── */
+.glass-card {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 16;
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-radius: 16;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0, 0, 8);
+}
+
+/* ─── Section Titles ─── */
+.section-title {
+    -fx-text-fill: rgba(255, 255, 255, 0.92);
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2;
+}
+
+/* ─── Header Bar ─── */
+.header-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.04);
+    -fx-background-radius: 14;
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+}
+
+.header-title {
+    -fx-text-fill: white;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.header-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+    -fx-font-size: 12px;
+}
+
+/* ─── Input Fields ─── */
+.dark-input {
+    -fx-background-color: rgba(255, 255, 255, 0.07);
+    -fx-background-radius: 10;
+    -fx-border-color: rgba(255, 255, 255, 0.15);
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: rgba(255, 255, 255, 0.35);
+    -fx-padding: 10 16;
+    -fx-font-size: 13px;
+}
+
+.dark-input:focused {
+    -fx-border-color: #7c5cfc;
+    -fx-background-color: rgba(124, 92, 252, 0.08);
+    -fx-effect: dropshadow(gaussian, rgba(124, 92, 252, 0.3), 12, 0, 0, 0);
+}
+
+/* ─── Buttons ─── */
+
+/* Primary button – vibrant purple gradient */
+.btn-primary {
+    -fx-background-color: linear-gradient(to right, #7c5cfc, #a855f7);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10 28;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(124, 92, 252, 0.45), 16, 0, 0, 4);
+}
+
+.btn-primary:hover {
+    -fx-background-color: linear-gradient(to right, #6d4de6, #9333ea);
+    -fx-effect: dropshadow(gaussian, rgba(124, 92, 252, 0.65), 20, 0, 0, 6);
+}
+
+.btn-primary:pressed {
+    -fx-background-color: linear-gradient(to right, #5e3dc7, #7e22ce);
+    -fx-effect: dropshadow(gaussian, rgba(124, 92, 252, 0.3), 8, 0, 0, 2);
+}
+
+.btn-primary:disabled {
+    -fx-opacity: 0.45;
+}
+
+/* Secondary button – teal/cyan gradient */
+.btn-secondary {
+    -fx-background-color: linear-gradient(to right, #06b6d4, #0891b2);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10 28;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.4), 16, 0, 0, 4);
+}
+
+.btn-secondary:hover {
+    -fx-background-color: linear-gradient(to right, #0891b2, #0e7490);
+    -fx-effect: dropshadow(gaussian, rgba(6, 182, 212, 0.6), 20, 0, 0, 6);
+}
+
+.btn-secondary:pressed {
+    -fx-background-color: linear-gradient(to right, #0e7490, #155e75);
+}
+
+.btn-secondary:disabled {
+    -fx-opacity: 0.45;
+}
+
+/* Accent button – warm amber */
+.btn-accent {
+    -fx-background-color: linear-gradient(to right, #f59e0b, #d97706);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 10 28;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.4), 16, 0, 0, 4);
+}
+
+.btn-accent:hover {
+    -fx-background-color: linear-gradient(to right, #d97706, #b45309);
+    -fx-effect: dropshadow(gaussian, rgba(245, 158, 11, 0.6), 20, 0, 0, 6);
+}
+
+.btn-accent:pressed {
+    -fx-background-color: linear-gradient(to right, #b45309, #92400e);
+}
+
+/* Ghost / icon button */
+.btn-ghost {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-text-fill: rgba(255, 255, 255, 0.7);
+    -fx-cursor: hand;
+    -fx-padding: 6 10;
+}
+
+.btn-ghost:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-text-fill: white;
+}
+
+/* Confirm name button – green */
+.btn-confirm {
+    -fx-background-color: linear-gradient(to right, #10b981, #059669);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 10 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.4), 12, 0, 0, 3);
+}
+
+.btn-confirm:hover {
+    -fx-background-color: linear-gradient(to right, #059669, #047857);
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.6), 16, 0, 0, 5);
+}
+
+/* ─── TableView Dark ─── */
+.dark-table {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-table .column-header-background {
+    -fx-background-color: rgba(124, 92, 252, 0.15);
+    -fx-background-radius: 8 8 0 0;
+}
+
+.dark-table .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+
+.dark-table .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.08) transparent;
+}
+
+.dark-table .column-header .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-font-weight: bold;
+    -fx-font-size: 11px;
+    -fx-padding: 8 12;
+}
+
+.dark-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.04) transparent;
+}
+
+.dark-table .table-row-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.02);
+}
+
+.dark-table .table-row-cell:selected {
+    -fx-background-color: rgba(124, 92, 252, 0.2);
+}
+
+.dark-table .table-row-cell:hover {
+    -fx-background-color: rgba(124, 92, 252, 0.1);
+}
+
+.dark-table .table-cell {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-padding: 8 12;
+    -fx-font-size: 12px;
+}
+
+.dark-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+.dark-table .table-row-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.dark-table .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.dark-table .scroll-bar .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.15);
+    -fx-background-radius: 4;
+}
+
+.dark-table .scroll-bar .increment-button,
+.dark-table .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.dark-table .scroll-bar .increment-arrow,
+.dark-table .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+.dark-table .placeholder .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.3);
+}
+
+/* ─── ListView Dark (Telemetry) ─── */
+.dark-list {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.dark-list .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: rgba(255, 255, 255, 0.65);
+    -fx-font-size: 11px;
+    -fx-padding: 6 10;
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.04) transparent;
+}
+
+.dark-list .list-cell:odd {
+    -fx-background-color: rgba(255, 255, 255, 0.015);
+}
+
+.dark-list .list-cell:selected {
+    -fx-background-color: rgba(124, 92, 252, 0.15);
+    -fx-text-fill: white;
+}
+
+.dark-list .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.dark-list .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.dark-list .scroll-bar .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-background-radius: 4;
+}
+
+.dark-list .scroll-bar .increment-button,
+.dark-list .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.dark-list .scroll-bar .increment-arrow,
+.dark-list .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}
+
+.dark-list .placeholder .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Footer / Status ─── */
+.status-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255, 255, 255, 0.06);
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+}
+
+.status-label {
+    -fx-text-fill: rgba(255, 255, 255, 0.45);
+    -fx-font-size: 12px;
+}
+
+.status-indicator-online {
+    -fx-text-fill: #10b981;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.status-indicator-offline {
+    -fx-text-fill: #ef4444;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+/* ─── Dot indicator ─── */
+.dot-online {
+    -fx-background-color: #10b981;
+    -fx-background-radius: 5;
+    -fx-min-width: 10;
+    -fx-min-height: 10;
+    -fx-max-width: 10;
+    -fx-max-height: 10;
+    -fx-effect: dropshadow(gaussian, rgba(16, 185, 129, 0.7), 8, 0, 0, 0);
+}
+
+.dot-offline {
+    -fx-background-color: #ef4444;
+    -fx-background-radius: 5;
+    -fx-min-width: 10;
+    -fx-min-height: 10;
+    -fx-max-width: 10;
+    -fx-max-height: 10;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.7), 8, 0, 0, 0);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   GAME SCREEN
+   ═══════════════════════════════════════════════════════════ */
+
+.game-root {
+    -fx-background-color: linear-gradient(to bottom right, #0f0c29, #1a1a3e, #24243e);
+}
+
+/* ─── Status Label ─── */
+#statusLabel {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-padding: 14 28;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-border-color: rgba(255, 255, 255, 0.08);
+    -fx-border-width: 1;
+}
+
+/* ─── Game Board ─── */
+.game-board {
+    -fx-padding: 20;
+    -fx-hgap: 8;
+    -fx-vgap: 8;
+}
+
+/* ─── Cell Buttons ─── */
+.cell-button {
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+    -fx-border-color: rgba(255, 255, 255, 0.12);
+    -fx-border-width: 2;
+    -fx-border-radius: 16;
+    -fx-background-radius: 16;
+    -fx-min-width: 110;
+    -fx-min-height: 110;
+    -fx-max-width: 110;
+    -fx-max-height: 110;
+    -fx-alignment: center;
+    -fx-text-fill: rgba(255, 255, 255, 0.3);
+    -fx-cursor: hand;
+}
+
+.cell-button:hover {
+    -fx-background-color: rgba(124, 92, 252, 0.12);
+    -fx-border-color: rgba(124, 92, 252, 0.35);
+    -fx-effect: dropshadow(gaussian, rgba(124, 92, 252, 0.25), 16, 0, 0, 0);
+}
+
+.cell-button:pressed {
+    -fx-background-color: rgba(124, 92, 252, 0.2);
+}
+
+.cell-button:disabled {
+    -fx-opacity: 1.0;
+    -fx-background-color: rgba(255, 255, 255, 0.03);
+    -fx-border-color: rgba(255, 255, 255, 0.06);
+    -fx-cursor: default;
+}
+
+/* ─── X Symbol – Electric Blue ─── */
+.x-symbol {
+    -fx-text-fill: #38bdf8;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.6), 20, 0, 0, 0);
+}
+
+.x-symbol:disabled {
+    -fx-text-fill: #38bdf8;
+    -fx-effect: dropshadow(gaussian, rgba(56, 189, 248, 0.4), 12, 0, 0, 0);
+}
+
+/* ─── O Symbol – Vibrant Pink ─── */
+.o-symbol {
+    -fx-text-fill: #f472b6;
+    -fx-effect: dropshadow(gaussian, rgba(244, 114, 182, 0.6), 20, 0, 0, 0);
+}
+
+.o-symbol:disabled {
+    -fx-text-fill: #f472b6;
+    -fx-effect: dropshadow(gaussian, rgba(244, 114, 182, 0.4), 12, 0, 0, 0);
+}
+
+/* ─── Back Button ─── */
+#backButton {
+    -fx-background-color: linear-gradient(to right, #ef4444, #dc2626);
+    -fx-background-radius: 10;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 12 32;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.45), 16, 0, 0, 4);
+}
+
+#backButton:hover {
+    -fx-background-color: linear-gradient(to right, #dc2626, #b91c1c);
+    -fx-effect: dropshadow(gaussian, rgba(239, 68, 68, 0.65), 20, 0, 0, 6);
+}
+
+#backButton:pressed {
+    -fx-background-color: linear-gradient(to right, #b91c1c, #991b1b);
+}
+
+/* ─── Game Title ─── */
+.game-title {
+    -fx-text-fill: white;
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+}
+
+.game-subtitle {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-font-size: 12px;
+}
+
+/* ─── Label helpers ─── */
+.label-muted {
+    -fx-text-fill: rgba(255, 255, 255, 0.4);
+    -fx-font-size: 11px;
+}
+
+/* ─── Separator ─── */
+.dark-separator {
+    -fx-background-color: rgba(255, 255, 255, 0.06);
+    -fx-min-height: 1;
+    -fx-max-height: 1;
+}
+
+/* ─── Dialog Pane (Alerts) ─── */
+.dialog-pane {
+    -fx-background-color: linear-gradient(to bottom right, #0f0c29, #1a1a3e);
+    -fx-border-color: rgba(255, 255, 255, 0.1);
+    -fx-border-width: 1;
+}
+
+.dialog-pane > .header-panel {
+    -fx-background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dialog-pane > .header-panel > .label {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane .content {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+    -fx-font-size: 13px;
+    -fx-padding: 20px;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: rgba(255, 255, 255, 0.85);
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-padding: 10px;
+}
+
+.dialog-pane .button {
+    -fx-background-color: linear-gradient(to right, #7c5cfc, #a855f7);
+    -fx-background-radius: 8;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 16;
+}
+
+.dialog-pane .button:hover {
+    -fx-background-color: linear-gradient(to right, #6d4de6, #9333ea);
+}

@@ -1,0 +1,26 @@
+services:
+  server:
+    build: ./Server
+    container_name: server
+    ports: 
+      - 5200:5200
+    # networks: 
+    #   - tris-net
+  
+  client:
+    build: ./Client
+    # container_name: client
+    # network_mode: host
+    # networks:
+    #   - tris-net
+    depends_on:
+      - server   # Avvia prima il server
+    environment:
+      - DISPLAY=${MAC_IP:-host.docker.internal}:0
+      - LIBGL_ALWAYS_SOFTWARE=1
+    # volumes:
+    #   - /tmp/.X11-unix:/tmp/.X11-unix
+    
+# networks:
+#   tris-net:
+#     driver: bridge

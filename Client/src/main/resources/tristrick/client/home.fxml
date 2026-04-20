@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import java.lang.String?>
+
+<VBox prefHeight="640.0" prefWidth="900.0" spacing="14"
+      styleClass="home-root"
+      xmlns="http://javafx.com/javafx/22"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="tristrick.client.HomeController">
+
+    <stylesheets>
+        <String fx:value="/tristrick/client/styles.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="18" left="22" right="22" top="18" />
+    </padding>
+
+    <!-- ═══ Header Bar ═══ -->
+    <HBox alignment="CENTER_LEFT" spacing="14" styleClass="header-bar">
+        <padding>
+            <Insets bottom="14" left="20" right="20" top="14" />
+        </padding>
+
+        <!-- Branding -->
+        <VBox spacing="0" alignment="CENTER_LEFT">
+            <Label text="⊞ TRIS" styleClass="header-title" />
+            <Label text="MULTIPLAYER" styleClass="header-subtitle" />
+        </VBox>
+
+        <!-- Spacer -->
+        <Region HBox.hgrow="ALWAYS" />
+
+        <!-- Player Name -->
+        <Label text="Giocatore:" styleClass="section-title" />
+        <TextField fx:id="monikerInputField" prefWidth="180"
+                   promptText="Nome giocatore"
+                   styleClass="dark-input" />
+        <Button fx:id="updateMonikerButton"
+                onAction="#handleReloadNameButtonAction"
+                text="Conferma"
+                styleClass="btn-confirm" />
+    </HBox>
+
+    <!-- ═══ Main Content ═══ -->
+    <HBox spacing="14" VBox.vgrow="ALWAYS">
+
+        <!-- ─── Game Ledger (left panel) ─── -->
+        <VBox styleClass="glass-card" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="14" left="16" right="16" top="14" />
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label text="◎ PARTITE DISPONIBILI" styleClass="section-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="syncButton" mnemonicParsing="false"
+                        onAction="#handleReloadButtonAction"
+                        styleClass="btn-ghost"
+                        prefWidth="36" prefHeight="36"
+                        alignment="CENTER" contentDisplay="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/arrow_update.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <VBox.margin>
+                    <Insets bottom="8" />
+                </VBox.margin>
+            </HBox>
+
+            <TableView fx:id="sessionLedgerView"
+                       styleClass="dark-table"
+                       VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="70"/>
+                    <TableColumn fx:id="stateColumn" text="Stato" prefWidth="130"/>
+                    <TableColumn fx:id="initiatorColumn" text="Creatore" prefWidth="90"/>
+                    <TableColumn fx:id="monikerColumn" text="Nome" prefWidth="160"/>
+                </columns>
+            </TableView>
+        </VBox>
+
+        <!-- ─── Telemetry Panel (right panel) ─── -->
+        <VBox prefWidth="280" styleClass="glass-card">
+            <padding>
+                <Insets bottom="14" left="16" right="16" top="14" />
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <Label text="◈ EVENTI" styleClass="section-title" />
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="purgeButton" mnemonicParsing="false"
+                        onAction="#handleCleanButtonAction"
+                        styleClass="btn-ghost"
+                        prefWidth="36" prefHeight="36"
+                        alignment="CENTER" contentDisplay="CENTER">
+                    <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0"
+                                   pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/clean.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <VBox.margin>
+                    <Insets bottom="8" />
+                </VBox.margin>
+            </HBox>
+
+            <ListView fx:id="telemetryListView"
+                      styleClass="dark-list"
+                      VBox.vgrow="ALWAYS" />
+        </VBox>
+    </HBox>
+
+    <!-- ═══ Action Buttons ═══ -->
+    <HBox alignment="CENTER" spacing="16">
+        <padding>
+            <Insets top="4" bottom="4" />
+        </padding>
+        <Button fx:id="attachButton"
+                onAction="#handleJoinButtonAction"
+                text="⬡ UNISCITI ALLA PARTITA"
+                styleClass="btn-secondary" />
+        <Button fx:id="instantiateButton"
+                onAction="#handleCreateButtonAction"
+                text="✦ CREA NUOVA PARTITA"
+                styleClass="btn-primary" />
+    </HBox>
+
+    <!-- ═══ Footer Status Bar ═══ -->
+    <HBox alignment="CENTER" spacing="10" styleClass="status-bar">
+        <padding>
+            <Insets bottom="10" left="16" right="16" top="10" />
+        </padding>
+        <Label text="Stato connessione:" styleClass="status-label" />
+        <Label fx:id="networkStatusIndicator" styleClass="status-label" />
+    </HBox>
+
+</VBox>

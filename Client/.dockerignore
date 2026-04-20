@@ -1,0 +1,25 @@
+# ===== IntelliJ IDEA =====
+.idea/
+*.iml
+*.iws
+
+# ===== File di sistema =====
+.DS_Store
+Thumbs.db
+
+# ===== Git =====
+.git
+.gitignore
+
+# ===== Maven =====
+target/
+*.log
+
+# ===== JavaFX SDK (se viene scaricata dinamicamente) =====
+lib/javafx-sdk-*/
+
+# ===== Altri file temporanei / build =====
+*.class
+*.jar
+*.war
+*.ear

@@ -1,0 +1,33 @@
+name: Build & Test C/C++ Project
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update && sudo apt install -y build-essential
+          sudo apt install -y build-essential libcjson-dev
+
+      - name: Compile project
+        run: make -C Server
+
+      - name: Set up Java 22
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '22'
+      
+      - name: Build Java Client with Maven
+        working-directory: Client
+        run: mvn clean package
