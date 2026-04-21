@@ -1,0 +1,274 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- UNIVERSAL PREAMBLE BLOCK ---
+\usepackage[a4paper, top=2.5cm, bottom=2.5cm, left=2cm, right=2cm]{geometry}
+\usepackage{fontspec}
+
+\usepackage[italian, bidi=basic, provide=*]{babel}
+
+\babelprovide[import, onchar=ids fonts]{italian}
+\babelprovide[import, onchar=ids fonts]{english}
+
+% Set default/Latin font to Sans Serif in the main (rm) slot
+\babelfont{rm}{Noto Sans}
+
+% Add because main language is not English
+\usepackage{enumitem}
+\setlist[itemize]{label=-}
+
+% --- ALTRI PACCHETTI ---
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+
+% Configurazione Colori e Stile per il Codice
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{uniblue}{rgb}{0.1, 0.2, 0.6}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegray},
+    keywordstyle=\color{uniblue}\bfseries,
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
+}
+\lstset{style=mystyle}
+
+% Configurazione Link
+\hypersetup{
+    colorlinks=true,
+    linkcolor=uniblue,
+    filecolor=magenta,      
+    urlcolor=uniblue,
+    pdftitle={Documentazione Progetto LSO - Tris},
+    pdfauthor={Luca Pagan}
+}
+
+\begin{document}
+
+% ---------------------------------------------------------
+% FRONTESPIZIO
+% ---------------------------------------------------------
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    {\Large \textbf{UNIVERSITÀ DEGLI STUDI}}\\[0.5cm]
+    {\large Dipartimento di Ingegneria Elettrica e delle Tecnologie dell'Informazione}\\[2cm]
+    
+    {\Large Corso di Laboratorio di Sistemi Operativi}\\[2.5cm]
+    
+    \rule{\textwidth}{0.4pt}\\[0.5cm]
+    {\huge \textbf{Documentazione del Progetto\\[0.5cm] Tic-Tac-Toe (Tris) Client-Server}}\\[0.4cm]
+    \rule{\textwidth}{0.4pt}\\[3cm]
+    
+    \begin{flushleft}
+        \Large
+        \textbf{Studenti:}\\
+        Luca Pagano\\
+        \normalsize Matricola: N86004788\\
+        \Large
+        Danilo Scala\\
+        \normalsize Matricola: N86004474\\
+    \end{flushleft}
+    
+    \vfill
+    
+    {\large Anno Accademico 2024-2025}\\[1cm]
+    {\normalsize \textbf{Repository GitHub:}\\ \url{https://github.com/LucaPagan/Tic-Tac-Toe-LSO.git}}
+    
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+% ---------------------------------------------------------
+% SEZIONE 1: INTRODUZIONE
+% ---------------------------------------------------------
+\section{Introduzione e Requisiti}
+
+Il presente documento illustra le scelte progettuali e implementative relative alla realizzazione di un'applicazione client-server dedicata alla gestione di partite del gioco del Tris in modalità multi-client. Il progetto è stato sviluppato come elaborato finale per il corso di Laboratorio di Sistemi Operativi.
+
+L'architettura del sistema prevede un \textbf{server centrale} scritto in linguaggio C, che si occupa di coordinare le connessioni e la logica di gioco, e uno o più \textbf{client} (sviluppati tipicamente con interfaccia grafica in Java/JavaFX o da terminale) che permettono agli utenti di interagire con il sistema.
+
+\subsection{Regole e Stati della Partita}
+Un utente connesso può creare nuove partite o partecipare a partite esistenti. Il ciclo di vita di una partita è gestito attraverso una macchina a stati:
+\begin{itemize}
+    \item \textbf{IN ATTESA}: La partita è stata creata da un utente ed è in attesa che un secondo giocatore si unisca.
+    \item \textbf{IN CORSO}: Un secondo giocatore ha richiesto di partecipare, il creatore ha accettato la sfida e i giocatori si stanno alternando nei turni.
+    \item \textbf{TERMINATA}: La partita si è conclusa con una vittoria, una sconfitta o un pareggio.
+\end{itemize}
+
+In caso di pareggio, il sistema prevede la possibilità di richiedere una \textbf{rivincita}. Se entrambi i client accettano, la tabella di gioco viene resettata e lo stato torna \textit{IN CORSO}.
+
+\newpage
+% ---------------------------------------------------------
+% SEZIONE 2: DESIGN DEL SISTEMA
+% ---------------------------------------------------------
+\section{Design del Sistema}
+
+Questa sezione descrive nel dettaglio le scelte progettuali relative all'architettura distribuita, alla gestione dell'ambiente di esecuzione e agli strumenti utilizzati per garantire scalabilità, manutenibilità e facilità di sviluppo dell'intero ecosistema client-server.
+
+\subsection{Comunicazione di Rete}
+La comunicazione tra client e server avviene esclusivamente tramite \textbf{socket TCP} (Transmission Control Protocol). Questa scelta architetturale è stata ponderata per garantire due aspetti fondamentali:
+\begin{itemize}
+    \item \textbf{Affidabilità}: il protocollo TCP assicura una consegna ordinata e senza perdite dei messaggi, condizione fondamentale e imprescindibile per mantenere la coerenza dello stato del gioco e del tabellone tra i vari partecipanti.
+    \item \textbf{Connessione persistente}: una volta stabilita la connessione iniziale, il canale socket resta attivo per l'intera durata della sessione di gioco, evitando l'overhead di riconnessione ad ogni singolo messaggio scambiato.
+\end{itemize}
+
+\subsection{Containerizzazione e Deployment}
+Per semplificare il processo di deployment e garantire l'assoluta portabilità del software, il sistema è stato interamente containerizzato utilizzando \textbf{Docker}. Sono stati definiti e creati due container distinti e isolati:
+\begin{itemize}
+    \item \textbf{Container Server}: predispone un ambiente minimale contenente il server scritto in C e tutte le librerie di sistema necessarie.
+    \item \textbf{Container Client}: fornisce un ambiente preconfigurato in Java per l'esecuzione fluida dell'applicativo client.
+\end{itemize}
+In questo modo è possibile eseguire l'intero sistema su qualunque macchina host azzerando i conflitti di dipendenze e assicurando una maggiore riproducibilità degli esperimenti.
+
+\subsection{Gestione del Codice, Configurazione e Build}
+Il ciclo di vita del software è gestito attraverso rigorose pratiche di versionamento e automazione:
+\begin{itemize}
+    \item \textbf{Versionamento}: Il progetto è gestito e tracciato tramite il sistema di controllo di versione \textbf{Git}.
+    \item \textbf{Automazione della Build}: La compilazione e l'esecuzione dei due moduli principali sono state automatizzate per ottimizzare i tempi di sviluppo:
+    \begin{itemize}
+        \item \textbf{Makefile}: utilizzato per automatizzare la compilazione del backend in C.
+        \item \textbf{Maven}: impiegato per la gestione delle dipendenze e la build del frontend in Java.
+    \end{itemize}
+\end{itemize}
+
+\newpage
+% ---------------------------------------------------------
+% SEZIONE 3: BACKEND (SERVER)
+% ---------------------------------------------------------
+\section{Architettura del Backend (Server)}
+
+Il backend rappresenta il cuore del sistema e gestisce l'integrità del gioco e la concorrenza tra i client. All'avvio, il server crea un socket passivo (\texttt{listen}) su una porta predefinita.
+
+\subsection{Gestione della Concorrenza}
+Per consentire a molteplici utenti di giocare contemporaneamente senza bloccare il server, è stato adottato un modello \textbf{Thread-per-Client}. 
+Per ogni connessione accettata dalla \texttt{accept()}, il server delega la gestione del client ad un thread dedicato creato tramite \texttt{pthread\_create}.
+
+\subsection{Strutture Dati Condivise}
+Il server deve mantenere lo stato globale del sistema, che comprende l'elenco degli utenti connessi e l'elenco delle partite.
+
+\begin{lstlisting}[language=C, caption=Struttura Dati Client]
+struct client {
+    unsigned int clientfd;        // File descriptor del socket
+    char* name;                   // Username del giocatore
+    pthread_mutex_t sock_mutex;   // Mutex per accesso esclusivo al socket
+};
+\end{lstlisting}
+
+Il \texttt{sock\_mutex} è fondamentale: previene il fenomeno dell'\textit{interleaving}. Quando il thread del server deve inviare una sequenza logica di messaggi al client (es. aggiornamento del tabellone e cambio turno), il mutex impedisce ad altri thread di scrivere sul medesimo socket contemporaneamente.
+
+\begin{lstlisting}[language=C, caption=Struttura Dati Game]
+struct game {
+    unsigned short int id_game;
+    struct client *client1;
+    struct client *client2;
+    unsigned int **table;         // Matrice 3x3 per il tabellone
+    game_status status;           // ATTESA, IN_CORSO, TERMINATA
+    unsigned int turn;            // Indica a chi tocca muovere
+};
+\end{lstlisting}
+
+\subsection{La libreria DynamicArray e Thread-Safety}
+Le liste dei client e dei game sono gestite tramite una struttura personalizzata \texttt{DynamicArray}. Poiché l'array dinamico è una risorsa condivisa tra tutti i thread (che possono aggiungere o rimuovere client e partite in qualsiasi momento), esso include un \texttt{pthread\_mutex\_t} interno.
+
+Ogni operazione di inserimento (\texttt{da\_push}), lettura (\texttt{da\_get\_at}) o rimozione (\texttt{da\_remove\_at}) acquisisce il lock prima di manipolare l'array, garantendo totale \textbf{thread-safety}. Inoltre, l'array è capace di ridimensionarsi automaticamente (\textit{shrink}) quando la memoria inutilizzata supera una certa soglia.
+
+\subsection{Generazione degli ID in tempo \texorpdfstring{$O(1)$}{O(1)}}
+\begin{sloppypar}
+Al fine di identificare in modo efficiente le partite, il sistema sfrutta gli indici del \texttt{DynamicArray}. La funzione \texttt{generate\_id()} restituisce il primo indice libero. Quando termina una partita, \texttt{release\_id()} segna quell'indice come riutilizzabile. Questo garantisce un accesso al match in tempo costante $O(1)$ usando il suo ID, evitando di iterare sull'intero array.
+\end{sloppypar}
+
+\subsection{Gestione dei Comandi (Protocollo)}
+Il protocollo è \textit{command-based}. I messaggi iniziano con un \texttt{enum command} (intero) che indica l'azione richiesta.
+
+\begin{lstlisting}[language=C, caption=Enum dei Comandi]
+typedef enum {
+    SERVER_OK = 0,
+    CREATE_GAME,
+    GET_QUEUE,
+    START_GAME,
+    DISCONNECT,
+    ACCEPT,
+    REJECT,
+    MAKE_MOVE
+} command;
+\end{lstlisting}
+
+Il thread dedicato al client legge ciclicamente il socket. Quando riceve \texttt{MAKE\_MOVE}, per esempio, aggiorna la matrice del gioco, verifica le condizioni di vittoria, e invia un broadcast (protetto da mutex) ai due socket coinvolti nella partita per aggiornare l'interfaccia.
+
+\newpage
+% ---------------------------------------------------------
+% SEZIONE 4: FRONTEND (CLIENT)
+% ---------------------------------------------------------
+\section{Architettura del Frontend (Client)}
+
+Il client fornisce all'utente finale uno strumento per interagire col server. Se sviluppato in Java con \textbf{JavaFX}, esso adotta il pattern architetturale \textit{Model-View-Controller (MVC)}.
+
+\subsection{Componenti Logici}
+\begin{itemize}
+    \item \textbf{Views (FXML)}: Definiscono la struttura visiva. Troviamo tipicamente una \texttt{HomeView} per la gestione delle lobby e una \texttt{GameView} che renderizza la griglia 3x3 del Tris.
+    \item \textbf{Controllers}: Classi Java associate alle View. Catturano gli eventi dell'interfaccia (es. click su un pulsante del tabellone) e invocano i metodi del Client di rete.
+    \item \textbf{Network Handler (GameClient)}: È il modulo responsabile dell'astrazione del livello di rete. Gestisce il socket TCP lato client.
+\end{itemize}
+
+\subsection{Gestione Asincrona della Rete}
+Un aspetto critico del client è la separazione tra il thread dell'Interfaccia Grafica (UI Thread) e l'I/O di rete. Le operazioni di rete in lettura sono bloccanti. Se il client leggesse dal socket nel thread della UI, l'applicazione si bloccherebbe in attesa dei messaggi del server ("Application Not Responding").
+
+Per ovviare a ciò, il \texttt{GameClient} avvia un thread demone parallelo (\texttt{startReader()}) dedicato esclusivamente all'ascolto dei messaggi provenienti dal server. Quando arriva un evento (es. "Avversario ha mosso"), il thread di rete utilizza primitive come \texttt{Platform.runLater()} (in JavaFX) per aggiornare la UI in modo thread-safe.
+
+\newpage
+% ---------------------------------------------------------
+% SEZIONE 5: LOGICA DI GIOCO
+% ---------------------------------------------------------
+\section{Logica e Controllo del Tris}
+
+La validazione delle mosse e la determinazione dell'esito della partita sono gestite dal Server, per evitare che client malintenzionati possano inviare mosse fraudolente (Server-Authoritative model).
+
+\subsection{Ciclo del Turno}
+\begin{enumerate}
+    \item Il client di turno invia il comando \texttt{MAKE\_MOVE} con le coordinate $(x, y)$.
+    \item Il server acquisisce il lock della partita, verifica che la cella $(x, y)$ sia vuota e che sia effettivamente il turno di quel client.
+    \item La cella viene marcata con l'ID o il simbolo del giocatore.
+    \item Vengono richiamate le funzioni di controllo: \texttt{check\_row()}, \texttt{check\_col()} e \texttt{check\_diag()}.
+    \item Se viene rilevata una vittoria, il server invia un pacchetto \texttt{GAME\_OVER} ad entrambi, seguito dallo stato di vittoria o sconfitta.
+    \item In caso contrario, verifica se il tabellone è pieno (\texttt{isBoardFull()}). Se sì, decreta il pareggio.
+    \item Altrimenti, il turno viene passato all'avversario e viene inviato il comando di aggiornamento ad entrambi i client.
+\end{enumerate}
+
+\subsection{Gestione delle Disconnessioni}
+Se un utente chiude brutalmente il client (crash o perdita di rete), la funzione \texttt{recv()} sul server restituisce 0 o un errore. Il thread del server rileva l'evento:
+\begin{itemize}
+    \item Libera il file descriptor.
+    \item Rimuove il client dalla lista dei client attivi.
+    \item Se il client era in una partita \textit{IN CORSO}, la partita viene terminata e viene notificata all'avversario la "Vittoria per abbandono".
+\end{itemize}
+
+\newpage
+% ---------------------------------------------------------
+% SEZIONE 6: CONCLUSIONI
+% ---------------------------------------------------------
+\section{Conclusioni}
+Il progetto ha permesso di applicare concretamente i concetti fondamentali dei sistemi operativi: gestione della concorrenza, sincronizzazione tra thread, utilizzo di meccanismi di mutua esclusione (mutex) e comunicazione IPC (Inter-Process Communication) tramite socket di rete. 
+
+L'architettura proposta garantisce stabilità, isolamento delle risorse e una gestione efficiente della memoria grazie alla corretta deallocazione e al riciclo degli identificatori logici.
+
+\end{document}
