@@ -90,7 +90,6 @@
     \vfill
     
     {\large Anno Accademico 2024-2025}\\[1cm]
-    {\normalsize \textbf{Repository GitHub:}\\ \url{https://github.com/LucaPagan/Tic-Tac-Toe-LSO.git}}
     
 \end{titlepage}
 
@@ -141,9 +140,8 @@ Per semplificare il processo di deployment e garantire l'assoluta portabilità d
 In questo modo è possibile eseguire l'intero sistema su qualunque macchina host azzerando i conflitti di dipendenze e assicurando una maggiore riproducibilità degli esperimenti.
 
 \subsection{Gestione del Codice, Configurazione e Build}
-Il ciclo di vita del software è gestito attraverso rigorose pratiche di versionamento e automazione:
+Il ciclo di vita del software è gestito attraverso rigorose pratiche di automazione:
 \begin{itemize}
-    \item \textbf{Versionamento}: Il progetto è gestito e tracciato tramite il sistema di controllo di versione \textbf{Git}.
     \item \textbf{Automazione della Build}: La compilazione e l'esecuzione dei due moduli principali sono state automatizzate per ottimizzare i tempi di sviluppo:
     \begin{itemize}
         \item \textbf{Makefile}: utilizzato per automatizzare la compilazione del backend in C.
@@ -213,7 +211,7 @@ typedef enum {
 } command;
 \end{lstlisting}
 
-Il thread dedicato al client legge ciclicamente il socket. Quando riceve \texttt{MAKE\_MOVE}, per esempio, aggiorna la matrice del gioco, verifica le condizioni di vittoria, e invia un broadcast (protetto da mutex) ai due socket coinvolti nella partita per aggiornare l'interfaccia.
+Il thread dedicato al client legge ciclicamente il socket. Quando riceve \texttt{MAKE\_MOVE}, per esempio, aggiorna la matrice del gioco, verifica le condizioni di vittoria, e invia un broadcast (protetto da mutex) ai due socket coinvolti nella partita per aggiornare l'interfaccia. Oltre all'enumerazione di base, i payload dei messaggi vengono formattati e scambiati strutturandoli nel formato \textbf{JSON} (tramite l'integrazione della libreria esterna \texttt{cJSON}). Questa scelta garantisce un'elevata flessibilità e facilità di parsing per il trasferimento di dati strutturati, come le coordinate delle mosse o i nomi utente, rendendo la comunicazione tra C e Java robusta ed estensibile.
 
 \newpage
 % ---------------------------------------------------------
@@ -269,6 +267,8 @@ Se un utente chiude brutalmente il client (crash o perdita di rete), la funzione
 \section{Conclusioni}
 Il progetto ha permesso di applicare concretamente i concetti fondamentali dei sistemi operativi: gestione della concorrenza, sincronizzazione tra thread, utilizzo di meccanismi di mutua esclusione (mutex) e comunicazione IPC (Inter-Process Communication) tramite socket di rete. 
 
-L'architettura proposta garantisce stabilità, isolamento delle risorse e una gestione efficiente della memoria grazie alla corretta deallocazione e al riciclo degli identificatori logici.
+L'architettura proposta garantisce stabilità, isolamento delle risorse e una gestione efficiente della memoria grazie alla corretta deallocazione e al riciclo degli identificatori logici. Durante lo sviluppo, al fine di scongiurare la presenza di memory leak o corruzioni di memoria nel backend, il codice C è stato rigorosamente analizzato e compilato in fase di test con l'ausilio di \texttt{AddressSanitizer} (\texttt{-fsanitize=address}).
+
+Inoltre, la robustezza del codice è stata validata attraverso l'implementazione di una suite di Unit Test. La solidità della logica del gioco (ricerca delle condizioni di vittoria, validazione delle mosse) e l'integrità delle strutture dati personalizzate (come l'array dinamico thread-safe) sono state testate sia tramite asserzioni standard nel codice C, sia avvalendosi del framework standard industriale \textbf{Google Test} (\texttt{gtest}) in C++, garantendo in tal modo una copertura affidabile per le successive iterazioni di sviluppo.
 
 \end{document}

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-// #include "../dynamic_array.h"
+#include <assert.h>
 
 #define MAX_CLIENTS 3
 
@@ -10,71 +10,63 @@ int available_ids[MAX_CLIENTS];
 int available_count = 0;
 pthread_mutex_t gen_id_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void print_avaible(){
-    printf("Available IDs: ");
-    for(int i=0; i<MAX_CLIENTS; ++i){
-        printf("%d ", available_ids[i]);
-    }
-    printf("\n");
-}
-
-int generate_id() {
+int generate_id()
+{
     pthread_mutex_lock(&gen_id_mutex);
-    
+
     int id;
-    if (available_count > 0) {
+    if (available_count > 0)
+    {
         id = available_ids[--available_count];
-    } else {
+    }
+    else
+    {
         id = next_id++;
     }
-    
+
     pthread_mutex_unlock(&gen_id_mutex);
     return id;
 }
 
-void release_id(int id) {
+void release_id(int id)
+{
     pthread_mutex_lock(&gen_id_mutex);
-    if (available_count < MAX_CLIENTS) {
+    if (available_count < MAX_CLIENTS)
+    {
         available_ids[available_count++] = id;
     }
     pthread_mutex_unlock(&gen_id_mutex);
 }
 
-int main() {
-    // Test ID generation and release
+int main()
+{
+    printf("--- Running test_gen_id ---\n");
     int ids[5];
 
-    print_avaible();
-    
     // Generate IDs
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5; i++)
+    {
         ids[i] = generate_id();
-        printf("Generated ID: %d\n", ids[i]);
+        assert(ids[i] == i); // Should sequence: 0, 1, 2, 3, 4
     }
 
-    print_avaible();
-    
+    assert(next_id == 5);
+
     // Release some IDs
     release_id(ids[1]);
-    printf("Released ID: %d\n", ids[1]);
-
     release_id(ids[3]);
-    printf("Released ID: %d\n", ids[3]);
-    print_avaible();
 
-    release_id(ids[2]);
-    printf("Released ID: %d\n", ids[2]);
-    print_avaible();
+    // Check if released ones are reused correctly
+    int new_id1 = generate_id();
+    int new_id2 = generate_id();
 
-    release_id(ids[4]);
-    printf("Released ID: %d\n", ids[4]);
-    print_avaible();
-    
-    // Generate more IDs to see if released ones are reused
-    for (int i = 0; i < 5; i++) {
-        int new_id = generate_id();
-        printf("Generated ID: %d\n", new_id);
-    }
-    
+    // Depending on stack logic (LIFO), order might be 3 then 1, or 1 then 3.
+    assert((new_id1 == 3 && new_id2 == 1) || (new_id1 == 1 && new_id2 == 3));
+
+    // Next ID should be a completely new one
+    int new_id3 = generate_id();
+    assert(new_id3 == 5);
+
+    printf("All gen_id tests passed.\n\n");
     return 0;
 }
